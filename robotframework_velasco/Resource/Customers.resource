@@ -164,22 +164,25 @@ Calculate and Display User Spending
     FOR    ${i}    ${element}    IN ENUMERATE    @{web_elems}
         ${name}    Get Data    ${i+1}    ${2}
         ${total_spending}    Get Data    ${i+1}    ${5}
+        ${sum}    Evaluate    ${total_spending} + ${sum}
         IF    ${total_spending} > 0
             ${total_spending}    Evaluate    f"{${total_spending}:,.2f}"
             Log To Console    ${list_num}. ${name}: $${total_spending}
             ${list_num}    Evaluate    ${list_num} + ${1} 
         END
-        ${sum}    Evaluate    ${sum} + ${total_spending}
+        
     END
     Display Total Spending    ${sum}
     Validate Total Spending    ${sum}
 
 Validate Total Spending
     [Arguments]    ${sum}
-    ${sum}    Evaluate    f"{${sum}:,.2f}"
+    
     IF    ${sum} < ${3500}
+        ${sum}    Evaluate    f"{${sum}:,.2f}"
         Fail    FAIL: Total spending ($${sum}) is below minimum threshold ($3,500)
     END
+        ${sum}    Evaluate    f"{${sum}:,.2f}"
         Pass Execution    PASS: Total spending ($${sum}) MEETS minimum threshold ($3,500)
     
 
